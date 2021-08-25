@@ -17,6 +17,13 @@
 	$: albumImage = '';
 	$: albumId = $selectedTrackAlbumId;
 
+	function formatDuration(durationInMs) {
+		const min = (durationInMs / 60000) | 0
+		const sec = (durationInMs % (min * 60000)) / 1000 | 0
+
+		return `${min < 10 ? min.toString().padStart(2, '0') : min}:${sec < 10 ? sec.toString().padStart(2, '0') : sec}`
+	}
+
 	async function listen(trackId) {
 		$selectedTrackId = trackId;
 		goto(`/track/${trackId}`);
@@ -67,44 +74,32 @@
 </section>
 
 {#if tracks}
-	<section id="tracks" class="container px-6 py-4 mx-auto">
-		<div
-			class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5"
-		>
-			{#each tracks as track}
-				<div class="w-full p-3 hover:cursor-pointer" on:click={() => listen(track.id)}>
-					<div
-						class="flex flex-row rounded-md overflow-hidden h-auto lg:h-32 shadow-lg hover:transition-colors duration-300 hover:bg-gray-700 border-2"
-					>
-						<div class="p-4 text-gray-300">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-								/>
-							</svg>
-						</div>
-						<div
-							class="rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal"
-						>
-							<div class="text-gray-300 font-bold text-xl mb-2 leading-tight">
-								{artist} - {albumName}
-							</div>
-							<p class="text-gray-500 text-base">
-								{track.name}
-							</p>
-						</div>
-					</div>
-				</div>
-			{/each}
+	<section id="tracks_new" class="container px-6 py-4 mx-auto">
+		<!-- song list header -->
+		<div class="flex text-gray-600">
+			<div class="p-2 w-8 flex-shrink-0"></div>
+			<div class="p-2 w-8 flex-shrink-0"></div>
+			<div class="p-2 w-full">Title</div>
+			<div class="p-2 w-full">Artist</div>
+			<div class="p-2 w-full">Album</div>
+			<div class="p-2 w-12 flex-shrink-0 text-right">⏱</div>
+		</div>
+		{#each tracks as track}
+			<div class="flex border-b text-gray-400 border-gray-600 hover:transition-colors duration-300 hover:bg-gray-700 hover:cursor-pointer" on:click={() => listen(track.id)}>
+				<div class="p-3 w-8 flex-shrink-0">▶️</div>
+				<div class="p-3 w-full">{track.name}</div>
+				<div class="p-3 w-full">{artist}</div>
+				<div class="p-3 w-full">{albumName}</div>
+				<div class="p-3 w-12 flex-shrink-0 text-right">{formatDuration(track.duration_ms)}</div>
+			</div>
+		{/each}
+		<div class="flex justify-center p-3">
+			<button
+				on:click={() => goto('/')}
+				class="flex items-center bg-green-500 hover:bg-green-400 text-white rounded-full h-12 shadow-md p-6"
+			>
+				Search another track, or artist
+			</button>
 		</div>
 	</section>
 {/if}
