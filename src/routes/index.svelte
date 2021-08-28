@@ -23,13 +23,14 @@
 	import { goto } from '$app/navigation';
 	import { selectedTrackId, selectedTrackAlbumId, lastQueryParams } from '../stores.js';
 	import { onMount } from 'svelte';
+	import { variables } from '$lib/clientConfig'
 
 	let query;
 	export let tracks;
 
 	async function search(q, offset = 0, limit = 20, append = false) {
 		const query = new URLSearchParams({ q, offset, limit });
-		const url = new URL(import.meta.env.VITE_PUBLIC_BASE_PATH);
+		const url = new URL(variables.basePath);
 		url.pathname = '/api/search';
 		url.search = query.toString();
 

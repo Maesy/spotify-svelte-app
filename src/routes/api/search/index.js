@@ -1,12 +1,10 @@
 import * as cookie from 'cookie'
 
-import { config } from '$lib/config'
-
 export async function get({ headers, query }) {
     const { accessToken } = headers.cookie ? cookie.parse(headers.cookie) : {}
 
     if (accessToken) {
-        const { SPOTIFY_WEB_API } = config
+        const { SPOTIFY_WEB_API } = process.env
         const url = new URL(`${SPOTIFY_WEB_API}/search`)
         // Extend query params with required search target
         query.append('type', 'track')

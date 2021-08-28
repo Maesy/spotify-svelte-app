@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  spotify-svelte-app:
+    build:
+      context: .
+    container_name: spotify-svelte-app
+    environment:
+      - SPOTIFY_WEB_API=https://api.spotify.com/v1
+      - SPOTIFY_ACCOUNTS_API=https://accounts.spotify.com/api
+      - SPOTIFY_CLIENT_ID=your_registered_spotify_app_client_id
+      - SPOTIFY_CLIENT_SECRET=your_registered_spotify_app_client_secret
+      - SPOTIFY_GRANT_TYPE=client_credentials
+      - VITE_PUBLIC_BASE_PATH=http://localhost:3000
+    ports:
+      - "3000:3000"

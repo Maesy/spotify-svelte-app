@@ -1,14 +1,10 @@
 import * as cookie from 'cookie'
 
-import dotenv from 'dotenv'
-
-const envVariables = dotenv.config()
-
 export async function post(request) {
     const { accessToken } = request.headers.cookie ? cookie.parse(request.headers.cookie): {}
     
     if (!accessToken) {
-        const { SPOTIFY_ACCOUNTS_API, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_GRANT_TYPE } = envVariables.parsed
+        const { SPOTIFY_ACCOUNTS_API, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_GRANT_TYPE } = process.env
         const basicAuthHeader = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
         const url = new URL(`${SPOTIFY_ACCOUNTS_API}/token`)
 
