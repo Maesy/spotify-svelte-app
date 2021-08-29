@@ -1,10 +1,12 @@
 import * as cookie from 'cookie'
 
+import { config } from '$lib/config'
+
 export async function post(request) {
     const { accessToken } = request.headers.cookie ? cookie.parse(request.headers.cookie): {}
     
     if (!accessToken) {
-        const { SPOTIFY_ACCOUNTS_API, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_GRANT_TYPE } = process.env
+        const { SPOTIFY_ACCOUNTS_API, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_GRANT_TYPE } = config
         const basicAuthHeader = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
         const url = new URL(`${SPOTIFY_ACCOUNTS_API}/token`)
 
